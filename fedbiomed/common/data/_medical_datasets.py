@@ -191,9 +191,9 @@ class NIFTIFolderDataset(Dataset):
             raise FedbiomedDatasetError(
                 f"{ErrorNumbers.FB612.value}: Cannot get sample number {item} from dataset, "
                 f"error message is {e}.")
-
+        
         target = int(self._targets[item])
-
+        
         if self._transform is not None:
             try:
                 img = self._transform(img)
@@ -238,7 +238,7 @@ class MedicalFolderBase(DataLoadingPlanMixin):
         Args:
             root: path to Medical Folder root folder.
         """
-        super(MedicalFolderBase, self).__init__()
+        super().__init__()
 
         if root is not None:
             root = self.validate_MedicalFolder_root_folder(root)
@@ -508,7 +508,7 @@ class MedicalFolderDataset(Dataset, MedicalFolderBase):
 
     [1] https://bids.neuroimaging.io/
     """
-    ALLOWED_EXTENSIONS = ['.nii', '.nii.gz']
+    ALLOWED_EXTENSIONS = ['.nii', '.nii.gz', '.csv']
 
     def __init__(self,
                  root: Union[str, PathLike, Path],
@@ -532,7 +532,7 @@ class MedicalFolderDataset(Dataset, MedicalFolderBase):
             tabular_file: Path to a CSV or Excel file containing the demographic information from the patients.
             index_col: Column name in the tabular file containing the subject ids which mush match the folder names.
         """
-        super(MedicalFolderDataset, self).__init__(root=root)
+        super().__init__(root=root)
 
         self._tabular_file = tabular_file
         self._index_col = index_col
@@ -560,7 +560,7 @@ class MedicalFolderDataset(Dataset, MedicalFolderBase):
                 f"{ErrorNumbers.FB613.value}: Cannot find complete subject folders with all the modalities")
         # Get subject folder
         subject_folder = subjects[item]
-
+        
         # Load data modalities
         data = self.load_images(subject_folder, modalities=self._data_modalities)
 
@@ -573,7 +573,7 @@ class MedicalFolderDataset(Dataset, MedicalFolderBase):
 
     def __getitem__(self, item):
         (data, demographics), targets = self.get_nontransformed_item(item)
-
+        
         # Apply transforms to data elements
         if self._transform is not None:
             for modality, transform in self._transform.items():
@@ -617,7 +617,7 @@ class MedicalFolderDataset(Dataset, MedicalFolderBase):
                     raise FedbiomedDatasetError(
                         f"{ErrorNumbers.FB613.value}: Cannot apply target transformation to modality `{modality}`"
                         f"in sample number {item} from dataset, error message is {e}.")
-
+        
         return (data, demographics), targets
 
     def __len__(self):
@@ -692,7 +692,7 @@ class MedicalFolderDataset(Dataset, MedicalFolderBase):
         if self._tabular_file is None or self._index_col is None:
             # If there is no tabular file return empty data frame
             return None
-
+        
         # Read demographics CSV
         try:
             demographics = self.read_demographics(self._tabular_file, self._index_col)
@@ -765,7 +765,11 @@ class MedicalFolderDataset(Dataset, MedicalFolderBase):
 
             # Load the first, we assume there is going to be a single image per modality for now.
             img_path = nii_files[0]
-            img = self._reader(img_path)
+            
+            if str(img_path).endswith('.csv'):
+                img = torch.tensor(pd.read_csv(img_path, index_col=0).T.iloc[0])
+            else:
+                img = self._reader(img_path)
             subject_data[modality] = img
 
         return subject_data
@@ -776,7 +780,7 @@ class MedicalFolderDataset(Dataset, MedicalFolderBase):
         Returns:
             List of subject directories that has all requested modalities
         """
-
+        
         # If demographics are present
         if self._tabular_file and self._index_col is not None:
             complete_subject_folders = self.subjects_registered_in_demographics

@@ -35,7 +35,7 @@ class Repository:
             tmp_dir: A directory for temporary files
             cache_dir: Currently unused
         """
-
+        
         self.uploads_url = uploads_url
         self.tmp_dir = tmp_dir
         self.cache_dir = cache_dir  # unused
@@ -216,10 +216,10 @@ class Repository:
         req_method = getattr(http_request, '__name__')
         req_method = req_method.upper()
         _method_msg = Repository._get_method_request_msg(req_method)
-
+        
         try:
             # issuing the HTTP request
-            res = http_request(url, *args, **kwargs)
+            res = http_request(url, verify=False, *args, **kwargs)
         except requests.Timeout:
             # request exceeded timeout set
             _msg = ErrorNumbers.FB201.value + f' : {req_method} HTTP request time exceeds Timeout'

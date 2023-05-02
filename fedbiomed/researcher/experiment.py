@@ -77,6 +77,7 @@ def exp_exceptions(function):
             logger.critical('Fed-BioMed researcher stopped due to keyboard interrupt')
         except FedbiomedError as e:
             code = 1
+            print(payload)
             print(
                 '\n--------------------',
                 f'Fed-BioMed researcher stopped due to exception:\n{str(e)}',

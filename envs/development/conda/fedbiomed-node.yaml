@@ -32,7 +32,7 @@ dependencies:
   #   scipy >= 1.9 from conda-forge needs recent GLIBC thus causes issue 389
   #   with many current systems
   #   another option is to install scipy from pip
-  - scipy >=1.8.0,<1.9.0
+  - scipy ==1.7.0 ##>=1.8.0,<1.9.0
   - scikit-learn <=0.24.2
   # other
   - itk
@@ -55,3 +55,6 @@ dependencies:
 #### Notebook-specific packages ####
 # This section contains packages that are needed only to run specific notebooks
       - unet == 0.7.7
+      - raster-geometry == 0.1.4.1
+      - connected-components-3d == 3.10.5
+      - pyOpenSSL

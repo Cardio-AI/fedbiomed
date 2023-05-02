@@ -5,6 +5,7 @@
 This module is a wrapper to the message bus used by Fed-BioMed.
 """
 
+import os
 import socket
 from typing import Any, Callable, Union
 
@@ -47,7 +48,8 @@ class Messaging:
 
         # Client() will generate a random client_id if not given
         # this means we choose not to use the {node,researcher}_id for this purpose
-        self._mqtt = mqtt.Client()
+        transport = os.environ.get('MQTT_BROKER_TRANSPORT_PROTOCOL', 'tcp') # 'tcp' or 'websockets'
+        self._mqtt = mqtt.Client(transport=transport)
         # defining a client.
         # defining MQTT 's `on_connect` and `on_message` handlers
         # (see MQTT paho documentation for further information

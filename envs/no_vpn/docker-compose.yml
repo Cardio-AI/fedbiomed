@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+
+  node:
+    container_name: fedbiomed-node
+    image: maltetoelle/fedbiomed-node:latest
+    environment:
+      - UPLOADS_URL=http://129.206.7.138:8844
+      - MQTT_BROKER=129.206.7.138
+      - MQTT_BROKER_PORT=1883
+    volumes:
+      - ./etc:/fedbiomed/etc
+      - ./var:/fedbiomed/var
+      - ../../data:/data
+    
+  gui:
+    container_name: fedbiomed-gui
+    image: maltetoelle/fedbiomed-gui:latest
+    environment:
+      - UPLOADS_URL=http://129.206.7.138:8844
+      - MQTT_BROKER=129.206.7.138
+      - MQTT_BROKER_PORT=1883
+    volumes:
+      - ./etc:/fedbiomed/etc
+      - ./var:/fedbiomed/var
+      - ../../data:/data
+    ports:
+      - 8484:8484

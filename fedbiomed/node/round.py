@@ -251,7 +251,7 @@ class Round:
             error_message = f"Undetermined error while creating data for training/validation. Can not create " \
                             f"validation/train data: {str(e)}"
             return self._send_round_reply(success=False, message=error_message)
-
+        
         # Validation Before Training
         if self.testing_arguments.get('test_on_global_updates', False) is not False:
 

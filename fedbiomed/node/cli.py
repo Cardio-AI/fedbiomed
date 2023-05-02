@@ -141,10 +141,10 @@ def launch_node(node_args: Union[dict, None] = None):
         node_args: Command line arguments for node
             See `Round()` for details.
     """
-
-    p = Process(target=manage_node, name='node-' + environ['NODE_ID'], args=(node_args,))
-    p.daemon = True
-    p.start()
+    manage_node(node_args)
+    # p = Process(target=manage_node, name='node-' + environ['NODE_ID'], args=(node_args,))
+    # p.daemon = True
+    # p.start()
 
     logger.info("Node started as process with pid = " + str(p.pid))
     try:
