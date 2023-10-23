@@ -50,6 +50,11 @@ class Messaging:
         # this means we choose not to use the {node,researcher}_id for this purpose
         transport = os.environ.get('MQTT_BROKER_TRANSPORT_PROTOCOL', 'tcp') # 'tcp' or 'websockets'
         self._mqtt = mqtt.Client(transport=transport)
+        proxy_host = os.environ.get('PROXY_HOST', None)
+        if proxy_host is not None:
+            import socks
+            proxy_port = os.environ.get('PROXY_PORT', 8080)
+            self._mqtt.proxy_set(proxy_type=socks.HTTP, proxy_addr=proxy_host, proxy_port=proxy_port)
         # defining a client.
         # defining MQTT 's `on_connect` and `on_message` handlers
         # (see MQTT paho documentation for further information
