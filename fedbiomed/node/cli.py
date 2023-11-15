@@ -145,7 +145,7 @@ def launch_node(node_args: Union[dict, None] = None):
     # p = Process(target=manage_node, name='node-' + environ['NODE_ID'], args=(node_args,))
     # p.daemon = True
     # p.start()
-
+    
     logger.info("Node started as process with pid = " + str(p.pid))
     try:
         print('To stop press Ctrl + C.')

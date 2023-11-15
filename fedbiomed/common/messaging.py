@@ -50,6 +50,17 @@ class Messaging:
         # this means we choose not to use the {node,researcher}_id for this purpose
         transport = os.environ.get('MQTT_BROKER_TRANSPORT_PROTOCOL', 'tcp') # 'tcp' or 'websockets'
         self._mqtt = mqtt.Client(transport=transport)
+        
+        self._mqtt.username_pw_set(username=os.environ.get('MQTT_USERNAME'), password=os.environ.get('MQTT_PASSWORD'))
+        mqtt_cert_path = os.environ.get('MQTT_CERT_PATH', "/mnt/ssd/git-repos/fedbiomed/combined_chain.pem")
+        self._mqtt.tls_set(ca_certs=mqtt_cert_path)
+        # path_to_certs = os.environ.get('MQTT_PATH_TO_CERTS', '/fedbiomed/certs')
+        # self._mqtt.tls_set(
+        #     ca_certs=f"{path_to_certs}/ca.crt",  # Path to the CA certificate
+        #     certfile=f"{path_to_certs}/client.crt",  # Path to the client certificate
+        #     keyfile=f"{path_to_certs}/client.key"  # Path to the client private key
+        # )
+        
         proxy_host = os.environ.get('PROXY_HOST', None)
         if proxy_host is not None:
             import socks

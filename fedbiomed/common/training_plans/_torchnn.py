@@ -520,13 +520,14 @@ class TorchTrainingPlan(BaseTrainingPlan, ABC):
         # compute loss
         loss = self.training_step(data, target)  # raises an exception if not provided
         corrected_loss = torch.clone(loss)
-
+        
         # If FedProx is enabled: use regularized loss function
         if self._fedprox_mu is not None:
             corrected_loss += float(self._fedprox_mu) / 2 * self.__norm_l2()
 
         # Run the backward pass to compute parameters' gradients
-        corrected_loss.backward()
+        if corrected_loss.requires_grad:
+            corrected_loss.backward()
 
         # If Scaffold is used: apply corrections to the gradients
         if self.aggregator_name is not None and self.aggregator_name.lower() == "scaffold":
@@ -534,10 +535,10 @@ class TorchTrainingPlan(BaseTrainingPlan, ABC):
                 correction = self.correction_state.get(name)
                 if correction is not None:
                     param.grad.add_(correction.to(param.grad.device))
-
+        
         # Have the optimizer collect, refine and apply gradients
         self._optimizer.step()
-
+        
         return corrected_loss, loss
 
     def testing_routine(

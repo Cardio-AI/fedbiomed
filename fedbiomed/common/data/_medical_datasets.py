@@ -569,6 +569,7 @@ class MedicalFolderDataset(Dataset, MedicalFolderBase):
 
         # Demographics
         demographics = self._get_from_demographics(subject_id=subject_folder.name)
+        
         return (data, demographics), targets
 
     def __getitem__(self, item):
@@ -764,10 +765,15 @@ class MedicalFolderDataset(Dataset, MedicalFolderBase):
                          if ''.join(p.suffixes) in self.ALLOWED_EXTENSIONS]
 
             # Load the first, we assume there is going to be a single image per modality for now.
+            # try:
             img_path = nii_files[0]
-            
+            # except:
+            #     import pdb;pdb.set_trace()
             if str(img_path).endswith('.csv'):
+                # try:
                 img = torch.tensor(pd.read_csv(img_path, index_col=0).T.iloc[0])
+                # except:
+                #     import pdb;pdb.set_trace()
             else:
                 img = self._reader(img_path)
             subject_data[modality] = img

@@ -124,8 +124,9 @@ class TorchDataManager(object):
 
         self._subset_train, self._subset_test = random_split(self._dataset, [train_samples, test_samples])
 
+        test_batch_size = 1 # self._loader_arguments.get('batch_size', 1)
         loaders = (self._subset_loader(self._subset_train, **self._loader_arguments),
-                   self._subset_loader(self._subset_test, batch_size=len(self._subset_test)))
+                   self._subset_loader(self._subset_test, batch_size=test_batch_size)) # len(self._subset_test)))
 
         return loaders
 
@@ -135,7 +136,6 @@ class TorchDataManager(object):
         Returns:
             Data manager to use in SkLearn base training plans
         """
-
         loader = self._create_torch_data_loader(self._dataset, batch_size=len(self._dataset))
         # Iterate over samples and get input variable and target variable
         inputs = next(iter(loader))[0].numpy()

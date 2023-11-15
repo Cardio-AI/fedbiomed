@@ -372,7 +372,7 @@ class Job:
 
         msg = {**headers, **self._repository_args}
         time_start = {}
-
+        
         # pass heavy aggregator params through file exchange system
         self.upload_aggregator_args(aggregator_args_thr_msg, aggregator_args_thr_files)
 
@@ -429,7 +429,7 @@ class Job:
                 if m['researcher_id'] != environ['RESEARCHER_ID'] or \
                         m['job_id'] != self._id or m['node_id'] not in list(self._nodes):
                     continue
-
+                
                 rtime_total = time.perf_counter() - time_start[m['node_id']]
 
                 # TODO : handle error depending on status
@@ -441,7 +441,8 @@ class Job:
                     except FedbiomedRepositoryError as err:
                         logger.error(f"Cannot download model parameter from node {m['node_id']}, probably because Node"
                                      f" stops working (details: {err})")
-                        return
+                        # return
+                        continue
                     loaded_model = self._training_plan.load(params_path, to_params=True)
                     params = loaded_model['model_params']
                     optimizer_args = loaded_model.get('optimizer_args')

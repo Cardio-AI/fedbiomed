@@ -219,6 +219,25 @@ class Repository:
         
         try:
             # issuing the HTTP request
+            login_route = os.environ.get('MQTT_LOGIN_ROUTE', "https://develop.fed-learning.org:443/login")
+            mqtt_cert_path = os.environ.get('MQTT_CERT_PATH')
+            response = requests.post(
+                login_route, 
+                data={
+                    "username": os.environ.get('MQTT_USERNAME'), 
+                    "password": os.environ.get('MQTT_PASSWORD')
+                },
+                verify=mqtt_cert_path # "/mnt/ssd/git-repos/fedbiomed/combined_chain.pem"
+            )
+            token = response.json().get("token")
+            
+            # Use the token in subsequent requests
+            if 'headers' in kwargs.keys():
+                kwargs['headers']['Authorization'] = f"Bearer {token}"
+            else:
+                kwargs['headers'] = {
+                    "Authorization": f"Bearer {token}"
+                }
             res = http_request(url, verify=False, *args, **kwargs)
         except requests.Timeout:
             # request exceeded timeout set

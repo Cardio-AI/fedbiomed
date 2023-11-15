@@ -418,7 +418,7 @@ class Requests(metaclass=SingletonMeta):
             # minify does not provide any specific exception
             logger.error(f"This file is not a python file ({e})")
             return {}
-        import pdb;pdb.set_trace()
+        
         # create a repository instance and upload the training plan file
         repository = Repository(environ['UPLOADS_URL'],
                                 environ['TMP_DIR'],

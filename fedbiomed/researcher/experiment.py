@@ -1573,7 +1573,7 @@ class Experiment(object):
             msg = ErrorNumbers.FB411.value + ', missing `job`'
             logger.critical(msg)
             raise FedbiomedExperimentError(msg)
-
+        
         # Ready to execute a training round using the job, strategy and aggregator
         if self._global_model is None:
             self._global_model = self._job.training_plan.get_model_params()  # initial server state, before optimization/aggregation
@@ -2028,7 +2028,7 @@ class Experiment(object):
                          save_breakpoints=True,
                          experimentation_folder=saved_state.get('experimentation_folder')
                          )
-
+        
         # nota: we are initializing experiment with no aggregator: hence, by default,
         # `loaded_exp` will be loaded with FedAverage.
 

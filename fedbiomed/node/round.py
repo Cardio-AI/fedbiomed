@@ -271,7 +271,7 @@ class Round:
             else:
                 logger.error(f"{ErrorNumbers.FB314}: Can not execute validation routine due to missing testing dataset"
                              f"Please make sure that `test_ratio` has been set correctly")
-
+        
         # If training is activated.
         if self.training:
             if self.training_plan.training_data_loader is not None:
@@ -393,7 +393,7 @@ class Round:
         test_ratio = self.testing_arguments.get('test_ratio', 0)
         test_global_updates = self.testing_arguments.get('test_on_global_updates', False)
         test_local_updates = self.testing_arguments.get('test_on_local_updates', False)
-
+        
         # Inform user about mismatch arguments settings
         if test_ratio != 0 and test_local_updates is False and test_global_updates is False:
             logger.warning("Validation will not be perform for the round, since there is no validation activated. "
@@ -407,7 +407,7 @@ class Round:
 
         # Setting validation and train subsets based on test_ratio
         training_data_loader, testing_data_loader = self._split_train_and_test_data(test_ratio=test_ratio)
-
+        
         # Set models validating and training parts for training plan
         self.training_plan.set_data_loaders(train_data_loader=training_data_loader,
                                             test_data_loader=testing_data_loader)
@@ -446,8 +446,9 @@ class Round:
         # Check batch_size is one of the argument of training_data method
         # `batch_size` is in used for only TorchTrainingPlan. If it is based to
         # sklearn, it will raise argument error
+        
         try:
-            if 'batch_size' in args:
+            if 'batch_size' in list(parameters.keys()):
                 data_manager = self.training_plan.training_data(batch_size=self.loader_arguments['batch_size'])
             else:
                 data_manager = self.training_plan.training_data()
