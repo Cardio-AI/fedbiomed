@@ -771,11 +771,19 @@ class MedicalFolderDataset(Dataset, MedicalFolderBase):
             #     import pdb;pdb.set_trace()
             if str(img_path).endswith('.csv'):
                 # try:
-                img = torch.tensor(pd.read_csv(img_path, index_col=0).T.iloc[0])
+                img = pd.read_csv(img_path, index_col=0)
+                if img.shape[-1] == 1:
+                    img = torch.tensor(img.T.iloc[0])
+                else:
+                    img = torch.from_numpy(img.to_numpy())
+                # img = torch.tensor(pd.read_csv(img_path, index_col=0).T.iloc[0])
                 # except:
                 #     import pdb;pdb.set_trace()
             else:
-                img = self._reader(img_path)
+                try:
+                    img = self._reader(img_path)
+                except:
+                    import pdb;pdb.set_trace()
             subject_data[modality] = img
 
         return subject_data

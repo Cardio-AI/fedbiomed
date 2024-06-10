@@ -1169,24 +1169,24 @@ class Experiment(object):
             FedbiomedExperimentError : bad training_plan_path type
         """
         # self._training_plan and self._training_plan_is_defined already exist when entering this function
-
+        
         if training_plan_path is None:
             self._training_plan_path = None
             # .. so training plan is defined if it is a class (+ then, it has been tested as valid)
             self._training_plan_is_defined = inspect.isclass(self._training_plan_class)
         elif isinstance(training_plan_path, str):
-            if sanitize_filepath(training_plan_path, platform='auto') == training_plan_path \
-                    and os.path.isfile(training_plan_path):
-                # provided training plan path is a sane path to an existing file
-                self._training_plan_path = training_plan_path
-                # if providing a training plan path, we expect a training plan class name (not a class)
-                self._training_plan_is_defined = isinstance(self._training_plan_class, str)
-            else:
-                # bad filepath
-                msg = ErrorNumbers.FB410.value + \
-                    f' `training_plan_path` : {training_plan_path} is not a same path to an existing file'
-                logger.critical(msg)
-                raise FedbiomedExperimentError(msg)
+            # if sanitize_filepath(training_plan_path, platform='auto') == training_plan_path \
+            #         and os.path.isfile(training_plan_path):
+            # provided training plan path is a sane path to an existing file
+            self._training_plan_path = training_plan_path
+            # if providing a training plan path, we expect a training plan class name (not a class)
+            self._training_plan_is_defined = isinstance(self._training_plan_class, str)
+            # else:
+            #     # bad filepath
+            #     msg = ErrorNumbers.FB410.value + \
+            #         f' `training_plan_path` : {training_plan_path} is not a same path to an existing file'
+            #     logger.critical(msg)
+            #     raise FedbiomedExperimentError(msg)
         else:
             # bad type
             msg = ErrorNumbers.FB410.value + f' `training_plan_path` must be string, but got type: {type(training_plan_path)}'

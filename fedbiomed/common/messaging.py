@@ -54,11 +54,16 @@ class Messaging:
         self._mqtt.username_pw_set(username=os.environ.get('MQTT_USERNAME'), password=os.environ.get('MQTT_PASSWORD'))
         mqtt_cert_path = os.environ.get('MQTT_CERT_PATH', "/mnt/ssd/git-repos/fedbiomed/combined_chain.pem")
         self._mqtt.tls_set(ca_certs=mqtt_cert_path)
+
         # path_to_certs = os.environ.get('MQTT_PATH_TO_CERTS', '/fedbiomed/certs')
+        # path_to_certs = '/mnt/ssd/git-repos/dl-data-preprocessing/develop/mqtt/certs'
+        # import pdb;pdb.set_trace()
+        # import ssl
         # self._mqtt.tls_set(
         #     ca_certs=f"{path_to_certs}/ca.crt",  # Path to the CA certificate
         #     certfile=f"{path_to_certs}/client.crt",  # Path to the client certificate
-        #     keyfile=f"{path_to_certs}/client.key"  # Path to the client private key
+        #     keyfile=f"{path_to_certs}/client.key",  # Path to the client private key
+        #     cert_reqs=ssl.CERT_NONE
         # )
         
         proxy_host = os.environ.get('PROXY_HOST', None)
@@ -220,7 +225,6 @@ class Messaging:
             FedbiomedMessagingError: If it can not connect MQTT broker
         """
         # will try to connect even if is_failed or is_connected, to give a chance to resolve problems
-
         try:
             self._mqtt.connect(self._mqtt_broker, self._mqtt_broker_port, keepalive=60)
         except (ConnectionRefusedError, TimeoutError, socket.timeout) as e:

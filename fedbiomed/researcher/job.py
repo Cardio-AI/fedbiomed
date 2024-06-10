@@ -577,6 +577,13 @@ class Job:
         converted_training_replies = []
 
         for round_ in training_replies.keys():
+            # import pdb;pdb.set_trace()
+            # tps = training_replies[round_].data()
+            # for tp in tps:
+            #     tp['params'] = {k: v.cpu() for k, v in tp['params'].items()}
+            # tps = training_replies[round_].data()
+            # for node in tps:
+            #     node['params'] = {k: v.cpu() for k, v in node['params'].items()}
             training_reply = copy.deepcopy(training_replies[round_].data())
             # we want to strip some fields for the breakpoint
             for node in training_reply:

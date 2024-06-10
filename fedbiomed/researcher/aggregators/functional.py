@@ -60,7 +60,10 @@ def weighted_sum(model_params: List[Dict[str, Union[torch.Tensor, np.ndarray]]],
     if t == 'tensor':
         for model, weight in zip(model_params, proportions):
             for key in avg_params.keys():
-                avg_params[key] += weight * model[key]
+                try:
+                    avg_params[key] += weight * model[key].to(avg_params[key].device)
+                except:
+                    import pdb;pdb.set_trace()
 
     if t == 'array':
         for key in avg_params.keys():

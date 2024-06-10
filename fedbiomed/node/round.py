@@ -462,7 +462,7 @@ class Round:
             raise FedbiomedRoundError(f"{ErrorNumbers.FB314.value}: The method `training_data` should return an "
                                       f"object instance of `fedbiomed.common.data.DataManager`, "
                                       f"not {type(data_manager)}")
-
+        
         # Specific datamanager based on training plan
         try:
             # This data manager can be data manager for PyTorch or Sk-Learn
