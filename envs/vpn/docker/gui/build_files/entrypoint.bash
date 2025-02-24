@@ -9,6 +9,14 @@ source /entrypoint_functions.bash
 init_misc_environ
 change_path_owner "/fbm-node" "/fedbiomed" "/home/$CONTAINER_BUILD_USER"
 
+# Rebuild ui if basepath is set
+if [ -n "$REACT_APP_BASE_PATH" ]; then
+  echo "Rebuilding fedbiomed_gui with base path: $REACT_APP_BASE_PATH"
+  cd /fedbiomed || exit 1
+  export PUBLIC_URL="$REACT_APP_BASE_PATH"
+  pip install ".[gui]"
+  cd /
+fi
 
 # To avoid envsubst to over write default nginx variables
 export DOLLAR='$'

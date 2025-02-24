@@ -48,10 +48,12 @@ jwt = JWTManager(app)
 app.register_blueprint(api)
 app.register_blueprint(auth)
 
-
+# Setup basepath for frontend
+base_path = os.environ.get("REACT_APP_BASE_PATH", '')
+root_path = base_path or '/'
 # Routes for react build directory
-@app.route('/', defaults={'path': ''}, methods=['GET'])
-@app.route('/<path:path>')
+@app.route(f'{root_path}', defaults={'path': ''}, methods=['GET'])
+@app.route(f'{base_path}/<path:path>')
 def index(path):
     """ The index route. This route should render the
         React build files. Which is located at the front-end folder.

@@ -23,12 +23,17 @@ class CustomBuildHook(BuildHookInterface):
                 "NodeJS `yarn` is required for building Fed-BioMed front-end application"
             )
 
+        env = os.environ.copy()
+        if env.get("REACT_APP_BASE_PATH"):
+            logger.info(f"Fedbiomed UI is running with basepath '{os.environ.get('REACT_APP_BASE_PATH')}'")
+            env["PUBLIC_URL"] = env["REACT_APP_BASE_PATH"]
+
         os.chdir("fedbiomed_gui/ui")
         try:
             logger.info("### Yarn: Installation front-end dependencies to prepare build.\n")
             subprocess.run([yarn, "install"], check=True)
             logger.info("\n### Yarn: Building front-end application run.\n")
-            subprocess.run([yarn, "build"], check=True)
+            subprocess.run([yarn, "build"], check=True, env=env)
         finally:
             os.chdir("../../")
 

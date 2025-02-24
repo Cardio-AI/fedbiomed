@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import {EP_REFRESH, EP_LOGIN} from './constants';
+import {LOGIN_REDIRECT_PATH,EP_REFRESH, EP_LOGIN} from './constants';
 import { getAccessToken, checkIsTokenActive, getRefreshToken }  from './store/actions/authActions';
 
 // this handler wraps axios logic request:
@@ -76,7 +76,7 @@ export const setupAxios = () => {
                       .catch(rf_error => {
                         // at this point, refresh token should have expired (as well as access token)
                         reject(rf_error);
-                        window.location.href = '/login'
+                        window.location.href = `${LOGIN_REDIRECT_PATH}`
                       })
                     } else {
                       // case where refresh token has expired
@@ -85,12 +85,12 @@ export const setupAxios = () => {
                   }else{
                     sessionStorage.removeItem('accessToken');
                     sessionStorage.removeItem('refreshToken');
-                    window.location.href = '/login'
+                    window.location.href = `${LOGIN_REDIRECT_PATH}`
                   }
                 }else{
                   sessionStorage.removeItem('accessToken');
                   sessionStorage.removeItem('refreshToken');
-                  window.location.href = '/login'
+                  window.location.href = `${LOGIN_REDIRECT_PATH}`
                 }
                 break;
               default:
