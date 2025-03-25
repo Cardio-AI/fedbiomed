@@ -18,6 +18,7 @@ import {
       useGeneratedHtmlId,
 
 } from '@elastic/eui'
+import { LOGIN_REDIRECT_PATH } from '../../constants';
 import logo from "../../assets/img/fedbiomed-logo-small.png";
 import style from './ProtectedRoutes.module.css'
 
@@ -41,7 +42,7 @@ export const LoginProtected = connect(mapStateToProps, mapDispatchToProps)( (pro
     let {userAutoLogin} = props
 
     if(!getAccessToken()){
-        window.location.href = '/login'
+        window.location.href = `${LOGIN_REDIRECT_PATH}`
     }
 
     if(user && !props.user.is_auth){

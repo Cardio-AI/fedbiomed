@@ -29,6 +29,7 @@ import UserInfo from "./pages/authentication/UserInfo";
 import UserManagement from "./pages/admin/UserManagement";
 import AccountRequestManagement from "./pages/admin/AccountRequestManagement";
 import UserAccount from './pages/authentication/UserAccount';
+import { BASE_PATH } from './constants';
 
 
 function App(props) {
@@ -40,7 +41,7 @@ function App(props) {
   return (
     <EuiProvider colorMode="light">
       <div className="App" >
-        <Router>
+        <Router basename={BASE_PATH}>
               <Routes>
                 <Route path="/login/" element={<Login/>} />
                 <Route path="/register/" element={<Register/>} />

@@ -13,6 +13,7 @@ ARG CONTAINER_GID
 ARG CONTAINER_UID
 ARG CONTAINER_GROUP
 ARG CONTAINER_USER
+ARG REACT_APP_BASE_PATH=""
 ARG PYTHON_VERSION="3.10"
 
 # assign default values even when variable exists and is empty
@@ -23,6 +24,8 @@ ENV CONTAINER_GID=${CONTAINER_GID:-0}
 # alpine does not accept users/groups with numerical names
 ENV CONTAINER_USER=${CONTAINER_USER:-root}
 ENV CONTAINER_GROUP=${CONTAINER_GROUP:-root}
+# set base path for UI fedbiomed UI access
+ENV REACT_APP_BASE_PATH=${REACT_APP_BASE_PATH:-""}
 
 RUN apt-get update && apt-get install -y gcc apt-utils wget procps systemd \
 	gettext-base libgmp3-dev libmpfr-dev libmpc-dev apt-utils wget git \
